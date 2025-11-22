@@ -11,9 +11,9 @@ import DropdownItem from "./DropdownItem";
 
 import NavItem from "./NavItem";
 
-// import AdminHeader from "./AdminHeader";
-// import AdminSideBar from "./AdminSideBar";
-// import AdminDashboard from "./AdminDashboard";
+import AdminHeader from "./AdminHeader";
+import AdminSideBar from "./AdminSideBar";
+import AdminDashboard from "./AdminDashboard";
 
 import DashboardFooter from "./DashboardFooter";
 
@@ -27,5 +27,8 @@ export {
   Dropdown,
   DropdownItem,
   NavItem,
+  AdminHeader,
+  AdminSideBar,
+  AdminDashboard,
   DashboardFooter,
 };
