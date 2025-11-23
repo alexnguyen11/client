@@ -22,5 +22,5 @@ export const navigation = [
   },
 
   { name: "Liên Hệ", href: "/contact" },
-  { name: "Đăng Ký", href: "/sign-up" },
+  { name: "Đăng Ký", href: "/student-sign-up" },
 ];
