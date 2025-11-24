@@ -75,7 +75,8 @@ const WhyAcademy = () => {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="w-full lg:w-1/2 relative min-h-[500px]"
+            // FIX: Changed 'min-h-[500px]' to explicit height on mobile 'h-[400px]' and 'lg:h-auto'
+            className="w-full lg:w-1/2 relative h-[400px] lg:h-auto lg:min-h-[500px]"
           >
             <div className="relative w-full h-full rounded-tl-[30px] rounded-bl-[30px] rounded-br-[30px] rounded-tr-[140px] overflow-hidden shadow-2xl">
               <Image

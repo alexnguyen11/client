@@ -3,17 +3,11 @@
 import { logoNoBg } from "@/assets/logo";
 import Image from "next/image";
 import Link from "next/link";
-import { Noto_Sans_JP } from "next/font/google";
+import { notoSansJP } from "@/utils/textFont";
 import { Facebook, Instagram, YouTube, Email, Phone, LocationOn } from "@mui/icons-material";
 import { useLanguage } from "@/context/LanguageContext"; // Import Context
 import { footerData } from "@/data/navigation"; // Import Data
 
-const notoSansJP = Noto_Sans_JP({
-  weight: ["400", "500", "700"],
-  subsets: ["japanese"],
-  display: "swap",
-  variable: "--font-noto-sans-jp",
-});
 
 const Footer = () => {
   const { lang } = useLanguage(); // Get current language

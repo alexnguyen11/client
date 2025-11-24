@@ -1,24 +1,17 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+
+import { useClickOutside } from "@/utils/useClickOutside";
 
 const DropdownItem = ({ item, scrolled }) => {
   const [open, setOpen] = useState(false);
   const hasChild = Array.isArray(item.children) && item.children.length > 0;
-  const ref = useRef(null);
+  const containerRef = useRef(null);
 
-  // Handle clicking outside only for this specific item
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (ref.current && !ref.current.contains(event.target)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  useClickOutside(containerRef, () => setOpen(false));
 
   // Theme Styles
   const theme = scrolled
@@ -38,7 +31,7 @@ const DropdownItem = ({ item, scrolled }) => {
   const baseItemClass = `w-full text-left flex items-center justify-between px-4 py-3 text-sm font-medium transition-colors duration-200 ${theme.text} ${theme.hover}`;
 
   return (
-    <div className="relative" ref={ref}>
+    <div className="relative" ref={containerRef}>
       {/* Parent Item Clickable or Toggle */}
       {hasChild ? (
         <button

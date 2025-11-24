@@ -1,14 +1,11 @@
 "use client";
 
-import Link from "next/link";
-import { useState } from "react";
-import { Menu, Close, ExpandMore } from "@mui/icons-material";
-import { LoginButton } from ".";
-import LanguageSwitcher from "./LanguageSwitcher";
+import { Menu, Close } from "@mui/icons-material";
+import { LoginButton, MobileNavItem, LanguageSwitcher } from ".";
 import { useLanguage } from "@/context/LanguageContext";
 
-const MobileNav = ({ open, toggleMenu }) => {
-  const { navigation } = useLanguage(); // Get translated data
+const MobileNav = ({ open, setOpen, toggleMenu }) => {
+  const { navigation } = useLanguage();
 
   const bgClass =
     "bg-gray-900/85 backdrop-blur-xl shadow-[0_4px_30px_rgba(0,0,0,0.1)] transform-gpu backface-hidden";
@@ -16,6 +13,21 @@ const MobileNav = ({ open, toggleMenu }) => {
 
   return (
     <>
+      {/* 1. BACKDROP OVERLAY 
+          - Visible only when open.
+          - Clicking this triggers setOpen(false).
+          - z-index is lower than the drawer (9999) but higher than the page.
+      */}
+      <div
+        className={`fixed inset-0 z-[9998] bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${
+          open
+            ? "opacity-100 visible"
+            : "opacity-0 invisible pointer-events-none"
+        }`}
+        onClick={() => setOpen(false)}
+      />
+
+      {/* 2. TOGGLE BUTTON */}
       <button
         onClick={toggleMenu}
         className={`sm:hidden p-2 rounded-md transition fixed top-4 right-4 z-[10000] text-white`}
@@ -24,92 +36,46 @@ const MobileNav = ({ open, toggleMenu }) => {
         {open ? <Close fontSize="medium" /> : <Menu fontSize="medium" />}
       </button>
 
+      {/* 3. DRAWER PANEL */}
       <div
-        className={`fixed top-0 right-0 z-[9999] h-full w-full max-w-xs sm:max-w-md transform transition-transform duration-300  ${
+        className={`fixed top-0 right-0 z-[9999] h-full w-[85%] max-w-xs transform transition-transform duration-300 ease-out ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
+        // Stop propagation: Clicking INSIDE the menu should not close it
+        onClick={(e) => e.stopPropagation()}
       >
-        <div
-          className={`h-20 flex items-center justify-between px-6 border-b ${borderColor} ${bgClass} text-white`}
-        >
-          <div onClick={toggleMenu}>
-            <LoginButton />
-          </div>
-        </div>
-
-        <nav
-          className={`px-4 py-6 flex flex-col h-[calc(100vh-80px)] ${bgClass}`}
-        >
-          {/* Mobile Language Switcher Section */}
-          <div className="mb-6 pb-6 border-b border-gray-700">
-             <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-3 px-2">Language</p>
-             <LanguageSwitcher isMobile={true} />
-          </div>
-
-          <div className="space-y-2 overflow-y-auto flex-1">
-            {navigation.map((item) => (
-              <MobileNavItem
-                key={item.name}
-                item={item}
-                toggleMenu={toggleMenu}
-              />
-            ))}
-          </div>
-        </nav>
-      </div>
-    </>
-  );
-};
-
-/* Dropdown Levels */
-const MobileNavItem = ({ item, toggleMenu, isNested = false }) => {
-  const [expanded, setExpanded] = useState(false);
-  const hasChildren = item.children?.length > 0;
-
-  return (
-    <div
-      className={!isNested && hasChildren ? "border-b border-gray-500/20" : ""}
-    >
-      {hasChildren ? (
-        <>
-          <button
-            onClick={() => setExpanded((prev) => !prev)}
-            className={`w-full flex items-center justify-between px-3 py-3 text-left rounded-md text-white`}
-          >
-            <span className="font-medium">{item.name}</span>
-            <ExpandMore
-              className={`w-5 h-5 transition-transform ${
-                expanded ? "rotate-180" : ""
-              }`}
-            />
-          </button>
+        <div className={`flex flex-col h-full ${bgClass}`}>
           <div
-            className={`overflow-hidden transition-all duration-300 ${
-              expanded ? "max-h-[1000px]" : "max-h-0"
-            }`}
+            className={`h-20 flex items-center justify-between px-6 border-b ${borderColor} text-white shrink-0`}
           >
-            <div className="pl-4">
-              {item.children.map((child) => (
+            <div onClick={() => setOpen(false)}>
+              <LoginButton />
+            </div>
+          </div>
+
+          <nav className="px-4 py-6 flex-1 overflow-y-auto">
+            {/* Mobile Language Switcher Section */}
+            <div className="mb-6 pb-6 border-b border-gray-700">
+              <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-3 px-2">
+                Language
+              </p>
+              <LanguageSwitcher isMobile={true} />
+            </div>
+
+            <div className="space-y-2">
+              {navigation.map((item) => (
                 <MobileNavItem
-                  key={child.name}
-                  item={child}
-                  toggleMenu={toggleMenu}
-                  isNested={true}
+                  key={item.name}
+                  item={item}
+                  // Pass setOpen so clicking a LINK closes the menu
+                  setOpen={setOpen}
                 />
               ))}
             </div>
-          </div>
-        </>
-      ) : (
-        <Link
-          href={item.href}
-          onClick={toggleMenu}
-          className={`block px-3 py-3 rounded-md text-white`}
-        >
-          {item.name}
-        </Link>
-      )}
-    </div>
+          </nav>
+        </div>
+      </div>
+    </>
   );
 };
 

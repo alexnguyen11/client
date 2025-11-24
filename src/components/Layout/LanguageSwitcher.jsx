@@ -16,7 +16,6 @@ const LanguageSwitcher = ({ scrolled, isMobile = false }) => {
   // click outside to close
   useClickOutside(containerRef, () => setOpen(false));
 
-
   const currentLang = languages.find((l) => l.code === lang);
 
   return (

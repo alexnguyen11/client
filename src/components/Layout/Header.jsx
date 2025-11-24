@@ -45,7 +45,7 @@ const Header = () => {
       </header>
 
       {/* Mobile */}
-      <MobileNav open={open} toggleMenu={toggleMenu} />
+      <MobileNav open={open} setOpen={setOpen} toggleMenu={toggleMenu} />
     </>
   );
 };

@@ -3,6 +3,8 @@ import Footer from "./Footer";
 
 import Navbar from "./Navbar";
 import MobileNav from "./MobileNav";
+import MobileNavItem from "./MobileNavItem";
+
 import LoginButton from "./LoginButton";
 import NavLogo from "./NavLogo";
 
@@ -24,6 +26,7 @@ export {
   Footer,
   Navbar,
   MobileNav,
+  MobileNavItem,
   LoginButton,
   NavLogo,
   Dropdown,
