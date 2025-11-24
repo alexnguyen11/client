@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { MobileNav, Navbar, NavLogo } from ".";
-import { navigation } from "@/data/navigation";
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -16,7 +15,6 @@ const Header = () => {
         setScrolled(false);
       }
     };
-
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -40,13 +38,14 @@ const Header = () => {
 
           {/* Desktop */}
           <div className="hidden sm:flex items-center gap-8">
-            <Navbar navigation={navigation} scrolled={scrolled} />
+            {/* Note: We no longer pass navigation prop manually, Navbar gets it from Context */}
+            <Navbar scrolled={scrolled} />
           </div>
         </div>
       </header>
 
       {/* Mobile */}
-      <MobileNav open={open} toggleMenu={toggleMenu} navigation={navigation} />
+      <MobileNav open={open} toggleMenu={toggleMenu} />
     </>
   );
 };

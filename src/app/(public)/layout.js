@@ -1,5 +1,6 @@
 import { Header, Footer } from "@/components/Layout";
 import { global_CSS } from "@/styles";
+import { LanguageProvider } from "@/context/LanguageContext";
 
 export const metadata = {
   title: "Takechi Gengo Gakuin",
@@ -10,7 +11,9 @@ const layout = ({ children }) => {
   return (
     <html>
       <body>
-        <Header /> {children} <Footer />
+        <LanguageProvider>
+          <Header /> {children} <Footer />
+        </LanguageProvider>
       </body>
     </html>
   );

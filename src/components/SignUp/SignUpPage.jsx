@@ -3,7 +3,8 @@
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { formSections, initialFormData } from "@/data/registrationForm";
+import { formSectionsData, registrationText, initialFormData } from "@/data/registrationForm"; // Import new data
+import { useLanguage } from "@/context/LanguageContext"; // Import Language Context
 import {
   ArrowForward,
   Check,
@@ -17,6 +18,12 @@ import {
 } from "@mui/icons-material";
 
 const SignupPage = () => {
+  const { lang } = useLanguage();
+  
+  // 1. Select Text and Data based on Language
+  const t = registrationText[lang] || registrationText["vi"];
+  const formSections = formSectionsData[lang] || formSectionsData["vi"];
+
   const [formData, setFormData] = useState(initialFormData);
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -64,32 +71,27 @@ const SignupPage = () => {
 
   return (
     <>
-      {/* Spacer: Matches the top of the dark gradient or the light gray */}
-      <div
-        className={`h-20 transition-all duration-700 ease-in-out 
-        ${isSubmitted ? "bg-gray-900" : "bg-gray-50"}`}
+      {/* Spacer */}
+      <div 
+        className={`h-20 transition-colors duration-700 ease-in-out 
+        ${isSubmitted ? "bg-[#1a1a1a]" : "bg-gray-50"}`}
       ></div>
 
-      {/* OUTER CONTAINER: Now uses a rich dark radial gradient on success */}
-      <div
-        className={`min-h-screen flex items-center justify-center p-4 sm:p-6 lg:p-8 font-sans transition-all duration-700 ease-in-out bg-fixed
-        ${
-          isSubmitted
-            ? "bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-900 via-[#0a0a0a] to-black"
-            : "bg-gray-50"
-        }`}
+      {/* OUTER CONTAINER */}
+      <div 
+        className={`min-h-screen flex items-center justify-center p-4 sm:p-6 lg:p-8 font-sans transition-colors duration-700 ease-in-out 
+        ${isSubmitted ? "bg-[#1a1a1a]" : "bg-gray-50"}`}
       >
         <div
           ref={topRef}
           className={`max-w-6xl w-full overflow-hidden flex flex-col lg:flex-row min-h-[650px] animate-fadeIn transition-all duration-700
-            ${
-              isSubmitted
-                ? "bg-transparent shadow-none" // Transparent wrapper so SuccessView (White) pops
+            ${isSubmitted 
+                ? "bg-transparent shadow-none" 
                 : "bg-white rounded-3xl shadow-2xl shadow-gray-200/50 border border-gray-100"
             }`}
         >
           {isSubmitted ? (
-            <SuccessView />
+            <SuccessView t={t} /> 
           ) : (
             <>
               {/* --- MOBILE BANNER --- */}
@@ -104,7 +106,7 @@ const SignupPage = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent p-8 flex flex-col justify-end text-white">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">
-                      {currentStep}/{totalSteps}
+                      {t.step} {currentStep}/{totalSteps}
                     </span>
                   </div>
                   <h3 className="text-2xl font-bold leading-tight shadow-sm">
@@ -118,10 +120,10 @@ const SignupPage = () => {
                 <div className="hidden lg:flex items-center justify-between mb-10">
                   <div>
                     <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
-                      Đăng Ký Học Viên
+                      {t.page_title}
                     </h1>
                     <p className="text-gray-500 text-sm mt-2 font-medium">
-                      Điền thông tin để nhận lộ trình tư vấn.
+                      {t.page_sub}
                     </p>
                   </div>
                   <div className="flex gap-2">
@@ -210,7 +212,7 @@ const SignupPage = () => {
                           className="text-gray-400 group-hover:text-gray-600 transition-colors"
                           fontSize="small"
                         />
-                        <span className="hidden sm:inline">Quay lại</span>
+                        <span className="hidden sm:inline">{t.btn_back}</span>
                       </button>
                     )}
 
@@ -226,32 +228,16 @@ const SignupPage = () => {
                     >
                       {loading ? (
                         <span className="flex items-center gap-2">
-                          <svg
-                            className="animate-spin h-5 w-5 text-white"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                          >
-                            <circle
-                              className="opacity-25"
-                              cx="12"
-                              cy="12"
-                              r="10"
-                              stroke="currentColor"
-                              strokeWidth="4"
-                            ></circle>
-                            <path
-                              className="opacity-75"
-                              fill="currentColor"
-                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                            ></path>
+                          <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                           </svg>
-                          Đang xử lý...
+                          {t.btn_loading}
                         </span>
                       ) : isLastStep ? (
                         <>
                           <span className="text-lg tracking-wide">
-                            Hoàn Tất Đăng Ký
+                            {t.btn_submit}
                           </span>
                           <span className="bg-white/20 rounded-full p-1">
                             <Check
@@ -263,7 +249,7 @@ const SignupPage = () => {
                       ) : (
                         <>
                           <span className="text-lg tracking-wide">
-                            Tiếp Theo
+                            {t.btn_next}
                           </span>
                           <ArrowForward
                             fontSize="small"
@@ -288,7 +274,7 @@ const SignupPage = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-red-950 via-red-900/20 to-transparent p-12 flex flex-col justify-between text-white z-10">
                   <div className="flex justify-end">
                     <span className="bg-white/10 backdrop-blur-md px-4 py-1.5 rounded-full text-sm font-semibold border border-white/10 shadow-sm">
-                      {currentStep} / {totalSteps}
+                      {t.step} {currentStep} / {totalSteps}
                     </span>
                   </div>
                   <div className="animate-fadeIn">
@@ -310,17 +296,16 @@ const SignupPage = () => {
 };
 
 /* ==========================================
-   Success View Component (WHITE CARD)
+   Success View Component
    ========================================== */
-const SuccessView = () => {
+const SuccessView = ({ t }) => {
   return (
     <div className="relative w-full flex flex-col items-center justify-center p-8 sm:p-20 text-center bg-white h-full animate-fadeIn overflow-hidden rounded-3xl shadow-2xl">
-      {/* Decorative Background Blobs (Adjusted for Light Mode) */}
       <div className="absolute top-0 left-0 w-64 h-64 bg-red-50 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
       <div className="absolute bottom-0 right-0 w-64 h-64 bg-blue-50 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
 
       <div className="relative z-10 flex flex-col items-center">
-        {/* Animated Success Icon */}
+        
         <div className="relative mb-8">
           <div className="absolute inset-0 bg-green-100 rounded-full animate-ping opacity-75"></div>
           <div className="relative w-28 h-28 bg-white rounded-full flex items-center justify-center shadow-xl shadow-green-100 ring-8 ring-green-50">
@@ -328,51 +313,47 @@ const SuccessView = () => {
           </div>
         </div>
 
-        {/* Text: Dark Gray for Light Background */}
         <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 mb-6 tracking-tight">
-          Đăng Ký Thành Công!
+          {t.success_title}
         </h2>
 
         <p className="text-gray-500 max-w-xl text-lg leading-relaxed mb-12">
-          Cảm ơn bạn đã chọn <strong>Takechi Language Academy</strong>. <br />
-          Chúng tôi đã nhận được hồ sơ và sẽ liên hệ tư vấn lộ trình cho bạn
-          trong vòng:
+          {t.success_desc_1} <strong>Takechi Language Academy</strong>. <br />
+          {t.success_desc_2}
           <br />
           <span className="inline-block mt-3 px-4 py-1 bg-red-50 text-red-600 font-bold rounded-full border border-red-100 text-sm uppercase tracking-wider shadow-sm">
-            24h Làm Việc
+            {t.success_badge}
           </span>
         </p>
 
-        {/* Menu Links */}
         <div className="w-full max-w-4xl grid grid-cols-1 sm:grid-cols-3 gap-5">
           <SuccessCard
             href="/"
             icon={<Home fontSize="large" className="text-red-600" />}
-            title="Trang Chủ"
-            desc="Quay về màn hình chính"
+            title={t.menu_home.title}
+            desc={t.menu_home.desc}
           />
 
           <SuccessCard
             href="/courses"
             icon={<MenuBook fontSize="large" className="text-blue-600" />}
-            title="Xem Khóa Học"
-            desc="Tìm hiểu lộ trình N5 - N1"
+            title={t.menu_courses.title}
+            desc={t.menu_courses.desc}
           />
 
           <SuccessCard
             href="/japan-explore"
             icon={<TravelExplore fontSize="large" className="text-pink-600" />}
-            title="Khám Phá Nhật Bản"
-            desc="Văn hóa & Du lịch"
+            title={t.menu_japan.title}
+            desc={t.menu_japan.desc}
           />
         </div>
 
-        {/* Social Footer */}
         <div className="mt-16 flex flex-col items-center gap-5">
           <div className="flex items-center gap-3 w-full justify-center">
             <div className="h-px w-12 bg-gray-200"></div>
             <span className="text-gray-400 text-xs font-bold uppercase tracking-widest">
-              Theo dõi chúng tôi
+              {t.follow_us}
             </span>
             <div className="h-px w-12 bg-gray-200"></div>
           </div>
@@ -400,13 +381,13 @@ const SuccessView = () => {
   );
 };
 
+// Helpers (Same as before)
 const SuccessCard = ({ href, icon, title, desc }) => (
   <Link
     href={href}
     className="group relative bg-white border border-gray-100 p-6 rounded-2xl flex flex-col items-center text-center transition-all duration-300 shadow-sm hover:shadow-xl hover:shadow-red-500/10 hover:-translate-y-1 overflow-hidden"
   >
     <div className="absolute top-0 right-0 -mt-8 -mr-8 w-32 h-32 bg-gray-100 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl pointer-events-none"></div>
-
     <div className="mb-4 p-4 bg-gray-50 rounded-2xl shadow-sm group-hover:bg-white group-hover:shadow-md group-hover:scale-110 transition-all duration-300 ring-1 ring-gray-100 relative z-10">
       {icon}
     </div>
@@ -422,7 +403,6 @@ const SuccessCard = ({ href, icon, title, desc }) => (
 const SocialLink = ({ href, icon, color }) => (
   <a
     href={href}
-    // CHANGED: bg-gray-100 (Light) for Light card background
     className={`w-11 h-11 flex items-center justify-center rounded-full bg-gray-100 text-gray-400 
     transition-all duration-300 transform hover:scale-110 hover:shadow-md
     ${color}

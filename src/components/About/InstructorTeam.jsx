@@ -4,28 +4,16 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { sutdents_whychooseus } from "@/assets/japan";
+import { useLanguage } from "@/context/LanguageContext";
+import { aboutUsData } from "@/data/about";
 
 const InstructorTeam = () => {
-  const features = [
-    {
-      title: "Giáo viên Bản Xứ (Sensei)",
-      desc: "100% có chứng chỉ giảng dạy quốc tế. Trực tiếp đứng lớp Kaiwa (Giao tiếp) và sửa phát âm chi tiết.",
-    },
-    {
-      title: "Giáo viên Việt Nam (N2/N1)",
-      desc: "Cựu du học sinh hoặc làm việc lâu năm tại Nhật. Am hiểu khó khăn của người Việt khi học tiếng Nhật.",
-    },
-    {
-      title: "Tận Tâm & Truyền Cảm Hứng",
-      desc: "Không chỉ dạy chữ, thầy cô còn là người truyền lửa, chia sẻ kinh nghiệm sống và làm việc thực tế.",
-    },
-  ];
+  const { lang } = useLanguage();
+  const t = aboutUsData[lang]?.instructorTeam || aboutUsData["vi"].instructorTeam;
 
   return (
     <section id="instructors" className="w-full py-24 sm:py-32 bg-white relative overflow-hidden">
       
-      {/* --- BACKGROUND WAVE PATTERN (Texture) --- */}
-      {/* Subtle background texture to match the theme */}
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none z-0">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -50,16 +38,16 @@ const InstructorTeam = () => {
           >
             <div className="mb-8">
               <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 leading-tight">
-                Đội Ngũ Giảng Viên <br />
-                <span className="text-red-600">Giàu Kinh Nghiệm</span> 
+                {t.title_normal} <br />
+                <span className="text-red-600">{t.title_highlight}</span> 
               </h2>
               <p className="text-lg text-gray-600 leading-relaxed">
-                Chất lượng giáo viên là niềm tự hào lớn nhất của Takechi. Chúng tôi tuyển chọn khắt khe để đảm bảo bạn được học với những người thầy giỏi nhất.
+                {t.description}
               </p>
             </div>
 
             <div className="space-y-6">
-              {features.map((item, idx) => (
+              {t.features.map((item, idx) => (
                 <motion.div 
                   key={idx}
                   initial={{ opacity: 0, y: 20 }}
@@ -92,7 +80,6 @@ const InstructorTeam = () => {
             transition={{ duration: 0.7 }}
             className="w-full lg:w-1/2 order-1 lg:order-2 relative"
           >
-            {/* Decorative Abstract Blobs behind image */}
             <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-red-100/50 rounded-full blur-[80px] -z-10"></div>
             
             <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl z-10 bg-gray-100">
@@ -103,10 +90,9 @@ const InstructorTeam = () => {
                 className="object-cover hover:scale-105 transition-transform duration-700"
               />
               
-              {/* Floating Badge */}
               <div className="absolute bottom-6 left-6 bg-white/95 backdrop-blur-md p-4 rounded-xl shadow-lg border-l-4 border-red-600 max-w-xs">
-                <p className="font-bold text-gray-900 text-sm">100% Giáo viên đạt chuẩn</p>
-                <p className="text-xs text-gray-500 mt-0.5">Nhiệt huyết - Tận tâm - Chuyên nghiệp</p>
+                <p className="font-bold text-gray-900 text-sm">{t.badge_title}</p>
+                <p className="text-xs text-gray-500 mt-0.5">{t.badge_sub}</p>
               </div>
             </div>
           </motion.div>

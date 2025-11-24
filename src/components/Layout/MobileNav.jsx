@@ -4,11 +4,14 @@ import Link from "next/link";
 import { useState } from "react";
 import { Menu, Close, ExpandMore } from "@mui/icons-material";
 import { LoginButton } from ".";
+import LanguageSwitcher from "./LanguageSwitcher";
+import { useLanguage } from "@/context/LanguageContext";
 
-const MobileNav = ({ open, toggleMenu, navigation }) => {
+const MobileNav = ({ open, toggleMenu }) => {
+  const { navigation } = useLanguage(); // Get translated data
+
   const bgClass =
     "bg-gray-900/85 backdrop-blur-xl shadow-[0_4px_30px_rgba(0,0,0,0.1)] transform-gpu backface-hidden";
-
   const borderColor = "border-gray-700";
 
   return (
@@ -27,7 +30,7 @@ const MobileNav = ({ open, toggleMenu, navigation }) => {
         }`}
       >
         <div
-          className={`h-20 flex items-center px-6 border-b ${borderColor} ${bgClass} text-white`}
+          className={`h-20 flex items-center justify-between px-6 border-b ${borderColor} ${bgClass} text-white`}
         >
           <div onClick={toggleMenu}>
             <LoginButton />
@@ -37,6 +40,12 @@ const MobileNav = ({ open, toggleMenu, navigation }) => {
         <nav
           className={`px-4 py-6 flex flex-col h-[calc(100vh-80px)] ${bgClass}`}
         >
+          {/* Mobile Language Switcher Section */}
+          <div className="mb-6 pb-6 border-b border-gray-700">
+             <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-3 px-2">Language</p>
+             <LanguageSwitcher isMobile={true} />
+          </div>
+
           <div className="space-y-2 overflow-y-auto flex-1">
             {navigation.map((item) => (
               <MobileNavItem
@@ -63,7 +72,6 @@ const MobileNavItem = ({ item, toggleMenu, isNested = false }) => {
     >
       {hasChildren ? (
         <>
-          {/* Parent button */}
           <button
             onClick={() => setExpanded((prev) => !prev)}
             className={`w-full flex items-center justify-between px-3 py-3 text-left rounded-md text-white`}
@@ -75,8 +83,6 @@ const MobileNavItem = ({ item, toggleMenu, isNested = false }) => {
               }`}
             />
           </button>
-
-          {/* Nested children */}
           <div
             className={`overflow-hidden transition-all duration-300 ${
               expanded ? "max-h-[1000px]" : "max-h-0"

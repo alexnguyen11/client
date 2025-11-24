@@ -11,6 +11,8 @@ import DropdownItem from "./DropdownItem";
 
 import NavItem from "./NavItem";
 
+import LanguageSwitcher from "./LanguageSwitcher";
+
 import AdminHeader from "./AdminHeader";
 import AdminSideBar from "./AdminSideBar";
 import AdminDashboard from "./AdminDashboard";
@@ -27,6 +29,7 @@ export {
   Dropdown,
   DropdownItem,
   NavItem,
+  LanguageSwitcher,
   AdminHeader,
   AdminSideBar,
   AdminDashboard,
